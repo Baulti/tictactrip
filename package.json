@@ -1,4 +1,17 @@
 {
+  "name": "justify",
+  "version": "1.0.0",
+  "description": "Justify backend",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "justify"
+  ],
+  "author": "titouan-raimbault",
+  "license": "MIT",
   "dependencies": {
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
@@ -8,5 +21,8 @@
     "mongoose": "^6.0.3",
     "nodemon": "^2.0.12",
     "npm": "^7.21.1"
+  },
+  "engines": {
+    "node": "12.18.3"
   }
 }
