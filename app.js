@@ -1,6 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const justifyController = require('./modules/justify/middlewares/justify-controller');
+const authController = require('./modules/auth/middelwares/auth-controllers');
+const bodyParser = require('body-parser')
+
 
 
 const app = express();
@@ -16,16 +19,20 @@ app.use((req, res, next) => {
 // Parsing request body
 app.use(express.text())
 
-/* Database connection
-mongoose.connect('mongodb+srv://admin:zonefranche@wineted.xomi2.mongodb.net/wineted?retryWrites=true&w=majority',
+//Database connection
+mongoose.connect('mongodb+srv://jusitfyUser:AdUdXNAFtTcPZfTG@cluster0.mckun.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
     {
         useNewUrlParser: true,
         useUnifiedTopology: true
     })
     .then(() => console.log('DB connection success'))
-    .catch(() => console.error('DB connection failed'));*/
+    .catch(() => console.error('DB connection failed'));
+
 
 // App routing configuration
-app.post('/api/justify', justifyController.justify);
+app.post('/api/justify', authController.tokenAuth, justifyController.justify);
+app.post('/api/signup', authController.signup);
+app.post('/api/login', authController.login);
+
 
 module.exports = app;
