@@ -24,12 +24,9 @@ mongoose.connect('mongodb+srv://jusitfyUser:AdUdXNAFtTcPZfTG@cluster0.mckun.mong
         useUnifiedTopology: true
     })
     .then(() => console.log('DB connection success'))
-    .catch(() => console.error('DB connection failed'));
-
-// Avoid deprecated stuffs with mongoose
-mongoose.set('useNewUrlParser', true);
-mongoose.set('useFindAndModify', false);
-mongoose.set('useCreateIndex', true);
+    .catch((error) =>{
+        console.error('DB connection failed', error);
+    });
 
 
 // App routing configuration
