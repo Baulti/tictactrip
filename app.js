@@ -4,8 +4,6 @@ const justifyController = require('./modules/justify/middlewares/justify-control
 const authController = require('./modules/auth/middelwares/auth-controllers');
 const limitController = require('./modules/limit/middelwares/limit-controllers');
 
-
-
 const app = express();
 
 // CORS configuration
