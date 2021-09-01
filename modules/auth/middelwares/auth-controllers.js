@@ -16,7 +16,6 @@ signup = (req, res, next) => {
                 .then((data) => {
                     return res.status(201).json({
                         message: 'User created with success',
-                        data: data
                     });
                 })
                 .catch((error) => {
