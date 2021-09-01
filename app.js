@@ -28,6 +28,11 @@ mongoose.connect('mongodb+srv://jusitfyUser:AdUdXNAFtTcPZfTG@cluster0.mckun.mong
     .then(() => console.log('DB connection success'))
     .catch(() => console.error('DB connection failed'));
 
+// Avoid deprecated stuffs with mongoose
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+
 
 // App routing configuration
 app.post('/api/justify', authController.tokenAuth, limitController.isLimitReached, justifyController.justify);
