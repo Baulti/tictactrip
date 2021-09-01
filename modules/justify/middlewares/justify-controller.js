@@ -34,7 +34,7 @@ justify = (req, res) => {
     // Add the last line
     justifiedText += text.slice(textIndex).trim();
 
-    res.status(200).send(justifiedText);
+    return res.status(200).send(justifiedText);
 }
 
 module.exports = { justify }

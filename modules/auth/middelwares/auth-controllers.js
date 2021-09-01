@@ -5,6 +5,7 @@ const User = require('../models/user');
 
 signup = (req, res, next) => {
     req.body = JSON.parse(req.body);
+    // Encrypt password before saving
     bcrypt.hash(req.body.password, B_CRYPT_SALT)
         .then(hash => {
             const user = new User({
@@ -13,13 +14,13 @@ signup = (req, res, next) => {
             });
             user.save()
                 .then((data) => {
-                    res.status(201).json({
+                    return res.status(201).json({
                         message: 'User created with success',
                         data: data
                     });
                 })
                 .catch((error) => {
-                    res.status(400).json({
+                    return res.status(400).json({
                         message: 'Error during user creation',
                         error: error
                     });
@@ -37,15 +38,16 @@ login = (req, res, next) => {
     User.findOne({ email: req.body.email })
         .then((user) => {
             if (!user) {
-                res.status(400).json({
-                    message: 'Incorrect mail login',
+                return res.status(400).json({
+                    message: 'Incorrect login',
                     error: {}
                 });
             } else {
+                // Password hashed comparison
                 bcrypt.compare(req.body.password, user.password, (err, valid) => {
                     if (!err) {
                         if (valid) {
-                            res.status(200).json({
+                            return res.status(200).json({
                                 token: jwt.sign(
                                     { userId: user._id },
                                     'RANDOM_TOKEN_SECRET',
@@ -53,13 +55,12 @@ login = (req, res, next) => {
                                 )
                             });
                         } else {
-                            res.status(400).json({
+                            return res.status(400).json({
                                 message: 'Incorrect password'
                             });
                         }
                     } else {
-                        console.error(err);
-                        res.status(500).json({
+                        return res.status(500).json({
                             message: 'Server error during login, cannot decrypte password',
                             error: err
                         });
@@ -68,7 +69,7 @@ login = (req, res, next) => {
             }
         })
         .catch((error) => {
-            res.status(500).json({
+            return res.status(500).json({
                 message: 'Server error during login',
                 error: error
             });
@@ -78,31 +79,33 @@ login = (req, res, next) => {
 tokenAuth = (req, res, next) => {
     const bearerHeader = req.headers['authorization'];
     if(!bearerHeader){
-        res.status(400).json({
+        return res.status(400).json({
             message: 'Invalid token !'
         });
     }
+    // Get token from bearer header HTTP request
     const token = bearerHeader.split(' ')[1];
     const tokenDecoded = jwt.decode(token);
     
 
     if (!tokenDecoded) {
-        res.status(400).json({
+        return res.status(400).json({
             message: 'Invalid token !'
         });
     } else {
         User.findOne({ _id: tokenDecoded.userId })
             .then((data) => {
                 if (!data) {
-                    res.status(404).json({
+                    return res.status(404).json({
                         message: 'User not found'
                     });
                 } else {
-                    next();
+                    req.userId = data._id;
+                    return next();
                 }
             })
             .catch((error) => {
-                res.status(500).json({
+                return res.status(500).json({
                     message: 'Server error during get user with token',
                     error: error
                 });

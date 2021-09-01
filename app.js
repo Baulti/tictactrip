@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const justifyController = require('./modules/justify/middlewares/justify-controller');
 const authController = require('./modules/auth/middelwares/auth-controllers');
-const bodyParser = require('body-parser')
+const limitController = require('./modules/limit/middelwares/limit-controllers');
 
 
 
@@ -30,7 +30,7 @@ mongoose.connect('mongodb+srv://jusitfyUser:AdUdXNAFtTcPZfTG@cluster0.mckun.mong
 
 
 // App routing configuration
-app.post('/api/justify', authController.tokenAuth, justifyController.justify);
+app.post('/api/justify', authController.tokenAuth, limitController.isLimitReached, justifyController.justify);
 app.post('/api/signup', authController.signup);
 app.post('/api/login', authController.login);
 
